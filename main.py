@@ -12,8 +12,9 @@ from telegram import Update
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext
 from telegram.ext.dispatcher import run_async
 
-import config
+from config import TOKEN
 from common import get_logger, log_func, reply_error
+from utils import decode
 
 
 log = get_logger(__file__)
@@ -22,6 +23,7 @@ log = get_logger(__file__)
 @run_async
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
+    # TODO: добавить описание бота и как с ним работать
     update.message.reply_text(
         'Введите что-нибудь'
     )
@@ -30,10 +32,12 @@ def on_start(update: Update, context: CallbackContext):
 @run_async
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
-    message = update.message
+    message = update.effective_message
+
+    text = decode(message.text)
 
     message.reply_text(
-        message.text,
+        text,
         reply_to_message_id=message.message_id
     )
 
@@ -51,7 +55,7 @@ def main():
 
     # Create the EventHandler and pass it your bot's token.
     updater = Updater(
-        config.TOKEN,
+        TOKEN,
         workers=workers,
         use_context=True
     )
