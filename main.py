@@ -4,6 +4,7 @@
 __author__ = 'ipetrash'
 
 
+import html
 import os
 import time
 
@@ -34,9 +35,10 @@ def on_start(update: Update, context: CallbackContext):
 def on_request(update: Update, context: CallbackContext):
     message = update.effective_message
 
-    text = decode(message.text)
+    text = html.escape(message.text)
+    text = decode(text)
 
-    message.reply_text(
+    message.reply_html(
         text,
         reply_to_message_id=message.message_id
     )
