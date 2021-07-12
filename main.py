@@ -38,10 +38,7 @@ def on_request(update: Update, context: CallbackContext):
     text = html.escape(message.text)
     text = decode(text)
 
-    message.reply_html(
-        text,
-        reply_to_message_id=message.message_id
-    )
+    message.reply_html(text, quote=True)
 
 
 def on_error(update: Update, context: CallbackContext):
