@@ -4,14 +4,12 @@
 __author__ = 'ipetrash'
 
 
-import html
 import os
 import time
 
 # pip install python-telegram-bot
 from telegram import Update
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext
-from telegram.ext.dispatcher import run_async
 
 from config import TOKEN
 from common import get_logger, log_func, reply_error
@@ -21,24 +19,20 @@ from utils import decode
 log = get_logger(__file__)
 
 
-@run_async
 @log_func(log)
 def on_start(update: Update, context: CallbackContext):
-    # TODO: добавить описание бота и как с ним работать
     update.message.reply_text(
-        'Введите что-нибудь'
+        'Бот для декодирования последовательностей вида &#x20AC; &#8364; &euro;'
     )
 
 
-@run_async
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
     message = update.effective_message
-
-    text = html.escape(message.text)
-    text = decode(text)
-
-    message.reply_html(text, quote=True)
+    message.reply_html(
+        decode(message.text),
+        quote=True
+    )
 
 
 def on_error(update: Update, context: CallbackContext):
@@ -61,8 +55,8 @@ def main():
 
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler('start', on_start))
-    dp.add_handler(MessageHandler(Filters.text, on_request))
+    dp.add_handler(CommandHandler('start', on_start, run_async=True))
+    dp.add_handler(MessageHandler(Filters.text, on_request, run_async=True))
 
     dp.add_error_handler(on_error)
 

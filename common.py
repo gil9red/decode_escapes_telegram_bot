@@ -7,7 +7,6 @@ __author__ = 'ipetrash'
 import functools
 import logging
 import sys
-import re
 from pathlib import Path
 
 from telegram import Update
