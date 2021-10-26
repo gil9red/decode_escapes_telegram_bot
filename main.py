@@ -29,7 +29,7 @@ def on_start(update: Update, context: CallbackContext):
 @log_func(log)
 def on_request(update: Update, context: CallbackContext):
     message = update.effective_message
-    message.reply_html(
+    message.reply_text(
         decode(message.text),
         quote=True
     )

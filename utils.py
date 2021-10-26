@@ -39,8 +39,6 @@ def decode_html(text: str) -> str:
     def _unescape(m: re.Match) -> str:
         return html.unescape(m.group())
 
-    text = html.escape(text, quote=False)
-    text = text.replace('&amp;', '&')  # Return '&'
     text = _charref.sub(_unescape, text)
     return text
 
@@ -56,6 +54,9 @@ if __name__ == '__main__':
 
     text = decode_html('"Hello" "World"!')
     assert text == '"Hello" "World"!'
+
+    text = decode_html('<p>&#x20AC; &#8364; &euro;</p>')
+    assert text == '<p>€ € €</p>'
 
     assert decode_escapes('') == ''
     assert decode_escapes('Hello') == 'Hello'
